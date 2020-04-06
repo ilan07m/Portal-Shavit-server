@@ -1,0 +1,1 @@
+USERS = ["devops", "ilan", "maya", "bar"]
