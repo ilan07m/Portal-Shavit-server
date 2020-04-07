@@ -1,7 +1,5 @@
 import flask
 from flask import request, jsonify, send_from_directory
-from resources.books import books
-from resources.users import USERS
 from resources.login_details import *
 from resources.servers import *
 from src.service_actions import *
@@ -14,11 +12,6 @@ app.config["DEBUG"] = DEBUG_MODE
 app.register_blueprint(swaggerui_blueprint, url_prefix=SWAGGER_URL)
 app.register_blueprint(REQUEST_API)
 
-# Check that paramiko connection is working
-# Replace to your personal user here TO CHECK!
-# run_command('touch ilanwashere', connect_to_server(TEMP_SERVER_NAME, MY_USERNAME, MY_PASS))
-
-
 # Route to static resources on demand
 @app.route('/static/<path:path>', methods=['GET'])
 def send_static(path):
@@ -30,21 +23,6 @@ def send_static(path):
 def home():
     return '''<h1>Portal Shavit Project</h1>
               <p>This site is a prototype API for Portal-Shavit.</p>'''
-
-
-# http://localhost:5000/api/v1/resources/books?id=0
-# Returns specific book, in this example in place 0
-@app.route('/api/v1/shavit/resources/books', methods=['GET'])
-def api_book_id():
-    if 'id' in request.args:
-        book_id = int(request.args['id'])
-    else:
-        return "Error: No id field provided. Please specify an id!"
-    results = []
-    for book in books:
-        if book['id'] == book_id:
-            results.append(book)
-    return jsonify(results)
 
 
 # http://localhost:5000/api/v1/resources/users/all
@@ -73,7 +51,7 @@ def api_servers_by_group_name():
     return jsonify(results)
 
 
-# http://localhost:5000/api/v1/shavit/actions/servers/service?serverName=13.82.138.97&serviceName=docker&actionType=status
+# http://localhost:5000/api/v1/shavit/actions/servers/service?serverName=<OUR_IP>&serviceName=docker&actionType=status
 # Performs the wanted service action on the wanted service on the wanted server
 # Checks if the service is valid from services.py file!
 @app.route('/api/v1/shavit/actions/servers/service', methods=['GET'])
