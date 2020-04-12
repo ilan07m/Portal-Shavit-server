@@ -26,9 +26,9 @@ python app.py
 
 ### API Resources
 
-  - [GET /api/v1/shavit/resources/users](#get-/api/v1/shavit/resources/users)
-  - [GET /api/v1/shavit/resources/servers](#get-/api/v1/shavit/resources/servers)
-  - [GET /api/v1/shavit/resources/servers?serverGroupName=<SERVER_GROUP_NAME>](#post-/api/v1/shavit/resources/servers?serverGroupName=<SERVER_GROUP_NAME>)
+  - [GET /api/v1/shavit/resources/users](#get-apiv1shavitresourcesusers)
+  - [GET /api/v1/shavit/resources/servers](#get-apiv1shavitresourcesservers)
+  - [GET /api/v1/shavit/resources/servers?serverGroupName=<SERVER_GROUP_NAME>](#get-apiv1shavitresourcesserversservergroupnameserver_group_name)
   - [GET /api/v1/shavit/actions/servers/service?serverName=<SERVER_NAME>&serviceName=<SERVICE_NAME>&actionType=<ACTION_TYPE>](#get-magazines)
   
 
