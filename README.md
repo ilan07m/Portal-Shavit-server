@@ -1,8 +1,8 @@
 # Portal-Shavit-server
 Server side of portal shavit
 * [Installation](#installation)
-* [Built With](#Built With)
-* [List Of Requests](#List Of Requests)
+* [Built With](#built-With)
+* [List Of Requests](#list-of-requests)
 
 ## Installation
 
