@@ -1,8 +1,8 @@
 import flask
 from flask import request, jsonify, send_from_directory
-from resources.login_details import *
 from resources.servers import *
 from src.service_actions import *
+from src.db_actions import *
 from src.swagger import swaggerui_blueprint, SWAGGER_URL, REQUEST_API
 DEBUG_MODE = True  # Change to False if you want to run without debug mode!
 
@@ -11,6 +11,7 @@ app = flask.Flask(__name__)
 app.config["DEBUG"] = DEBUG_MODE
 app.register_blueprint(swaggerui_blueprint, url_prefix=SWAGGER_URL)
 app.register_blueprint(REQUEST_API)
+
 
 # Route to static resources on demand
 @app.route('/static/<path:path>', methods=['GET'])
@@ -25,26 +26,24 @@ def home():
               <p>This site is a prototype API for Portal-Shavit.</p>'''
 
 
-# http://localhost:5000/api/v1/resources/users/all
+# TODO: Make it without the /all --> check if there is no params in the url then return all servers
+# http://localhost:5000/api/v1/shavit/resources/users
 # Returns all users
-@app.route('/api/v1/shavit/resources/users/all', methods=['GET'])
+@app.route('/api/v1/shavit/resources/users', methods=['GET'])
 def api_all_users():
     return jsonify(USERS)
 
 
-# http://localhost:5000/api/v1/resources/servers/all
+# http://localhost:5000/api/v1/shavit/resources/servers
 # Returns all servers
-@app.route('/api/v1/shavit/resources/servers/all', methods=['GET'])
-def api_all_servers():
-    return jsonify(SERVERS)
-
-
-# http://localhost:5000/api/v1/resources/servers?serverGroupName=openshift
+# http://localhost:5000/api/v1/shavit/resources/servers?serverGroupName=openshift
 # Returns all servers of server group, in this example all openshift servers
 @app.route('/api/v1/shavit/resources/servers', methods=['GET'])
 def api_servers_by_group_name():
     if 'serverGroupName' in request.args:
         serverGroupName = str(request.args['serverGroupName']).upper()
+    elif 'serverGroupName' not in request.args:
+        return jsonify(SERVERS)
     else:
         return "Error: No id field provided. Please specify an server group name!"
     results = return_all_servers_of_group(serverGroupName)
@@ -62,6 +61,22 @@ def api_service_action():
         return "Error: Bad arguments. Please specify valid server and service name, and action type!"
     output = action_on_service(request.args, actionType, MY_USERNAME, MY_PASS)
     return output
+
+
+# http://localhost:5000/api/v1/shavit/dbs/postgres/dbs
+# Returns all postgres dbs
+@app.route('/api/v1/shavit/dbs/postgres/dbs', methods=['GET'])
+def api_pg_dbs():
+    return jsonify(pg_dbs())
+
+
+# http://localhost:5000/api/v1/shavit/dbs/mongo/dbs
+# Returns all mongo dbs
+@app.route('/api/v1/shavit/dbs/mongo/dbs', methods=['GET'])
+def api_mongo_dbs():
+    return jsonify(mongo_dbs())
+
+# TODO: Return Oracle dbs API
 
 
 if __name__ == '__main__':

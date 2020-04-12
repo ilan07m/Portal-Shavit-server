@@ -125,4 +125,4 @@ def return_all_servers_of_group(serverGroupName):
         for serverGroup in servers:
             if serverGroup == serverGroupName:
                 results.append(servers[serverGroup])
-    return results
+    return results[0]
