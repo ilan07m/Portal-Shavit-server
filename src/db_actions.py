@@ -1,6 +1,40 @@
-import psycopg2
-import pymongo
-from resources.login_details import *
+from .databeses.postgres import *
+from .databeses.mongo import *
+from .databeses.oracle import *
+
+
+def all_postgres_dbs(): return pg_dbs()
+
+
+def all_mongo_dbs(): return mongo_dbs()
+
+
+def all_oracle_dbs(): return 'ORACLE is about to be ready...'
+
+
+def get_all_dbs(dbType):
+    switch = {'postgres': all_postgres_dbs, 'mongo': all_mongo_dbs, 'oracle': all_oracle_dbs}
+    func = switch.get(dbType, lambda: 'Not a valid dbType...')
+    output = func()
+    return output
+
+
+'''
+def get_all_dbs(dbType):
+    if dbType == 'postgres':
+        print('postgres db is chosen!')
+        output = pg_dbs()
+    elif dbType == 'mongo':
+        print('mongo db is chosen!')
+        output = mongo_dbs()
+    elif dbType == 'oracle':
+        # TODO: Make oracle.py module
+        print('oracle db is chosen!')
+        output = "ORACLE is about to be ready..."
+    else:
+        output = "Not a valid dbType..."
+    return output
+'''
 
 # POSTGRES
 '''
@@ -24,24 +58,6 @@ except psycopg2.Error as e:
 '''
 
 
-def pg_dbs():
-    DB_NAME = "postgres"
-    try:
-        # TODO: Change host name
-        # TODO: Get DB name, user and password as parameter
-        db_conn = psycopg2.connect(host=TEMP_SERVER_NAME, port=PG_PORT, dbname=DB_NAME, user=PG_ROOT_USER,
-                                   password=PG_ROOT_PASSWORD)
-        db_cursor = db_conn.cursor()
-        db_cursor.execute("""SELECT datname FROM pg_database;""")
-        dbList = []
-        for database in db_cursor.fetchall():
-            print(database[0])
-            dbList.append(database[0])
-    except psycopg2.Error as e:
-        print(e)
-    return dbList
-
-
 # MONGO
 '''
 client = pymongo.MongoClient(MONGO_CONNECTION_STRING)
@@ -54,9 +70,3 @@ print("Current DB is: " + db.name)
 print("Collections list in current db is:")
 print(collectionsList)
 '''
-
-
-def mongo_dbs():
-    client = pymongo.MongoClient(MONGO_CONNECTION_STRING)
-    dbsList = client.list_database_names()
-    return dbsList

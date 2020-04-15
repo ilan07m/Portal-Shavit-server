@@ -19,7 +19,5 @@ def run_command(command, ssh):
     error = stderr.readlines()
     if len(error) != 0:
         print(error)
-    '''for line in output.splitlines():
-        print(line)'''
     ssh.close()
     return output

@@ -3,6 +3,7 @@ from flask import request, jsonify, send_from_directory
 from resources.servers import *
 from src.service_actions import *
 from src.db_actions import *
+from resources.login_details import *
 from src.swagger import swaggerui_blueprint, SWAGGER_URL, REQUEST_API
 DEBUG_MODE = True  # Change to False if you want to run without debug mode!
 
@@ -26,7 +27,6 @@ def home():
               <p>This site is a prototype API for Portal-Shavit.</p>'''
 
 
-# TODO: Make it without the /all --> check if there is no params in the url then return all servers
 # http://localhost:5000/api/v1/shavit/resources/users
 # Returns all users
 @app.route('/api/v1/shavit/resources/users', methods=['GET'])
@@ -63,20 +63,18 @@ def api_service_action():
     return output
 
 
-# http://localhost:5000/api/v1/shavit/dbs/postgres/dbs
-# Returns all postgres dbs
-@app.route('/api/v1/shavit/dbs/postgres/dbs', methods=['GET'])
-def api_pg_dbs():
-    return jsonify(pg_dbs())
-
-
-# http://localhost:5000/api/v1/shavit/dbs/mongo/dbs
-# Returns all mongo dbs
-@app.route('/api/v1/shavit/dbs/mongo/dbs', methods=['GET'])
-def api_mongo_dbs():
-    return jsonify(mongo_dbs())
-
-# TODO: Return Oracle dbs API
+# http://localhost:5000/api/v1/shavit/dbs
+# Returns all available types of dbs we have
+# http://localhost:5000/api/v1/shavit/dbs?dbType=postgres
+# Returns all dbs of postgres / mongo / oracle
+@app.route('/api/v1/shavit/dbs', methods=['GET'])
+def api_get_dbs():
+    if 'dbType' in request.args:
+        dbType = str(request.args['dbType'])
+    elif 'dbType' not in request.args:
+        return jsonify(DATABASES)
+    output = get_all_dbs(dbType)
+    return jsonify(output)
 
 
 if __name__ == '__main__':
