@@ -4,12 +4,19 @@ from .databeses.oracle import *
 
 
 def all_postgres_dbs(): return pg_dbs()
+def bk_all_pg(): return pg_backup_all()
+def restore_all_pg(): return pg_restore_all()
 
 
 def all_mongo_dbs(): return mongo_dbs()
+def bk_all_mongo(): return mongo_backup_all()
+def restore_all_mongo(): return mongo_restore_all()
 
 
-def all_oracle_dbs(): return 'ORACLE is about to be ready...'
+
+def all_oracle_dbs(): return oracle_dbs()
+def bk_all_oracle(): return oracle_backup_all()
+def restore_all_oracle(): return oracle_restore_all()
 
 
 def get_all_dbs(dbType):
@@ -19,22 +26,19 @@ def get_all_dbs(dbType):
     return output
 
 
-'''
-def get_all_dbs(dbType):
-    if dbType == 'postgres':
-        print('postgres db is chosen!')
-        output = pg_dbs()
-    elif dbType == 'mongo':
-        print('mongo db is chosen!')
-        output = mongo_dbs()
-    elif dbType == 'oracle':
-        # TODO: Make oracle.py module
-        print('oracle db is chosen!')
-        output = "ORACLE is about to be ready..."
-    else:
-        output = "Not a valid dbType..."
+def backup_all_dbs(dbType):
+    switch = {'postgres': bk_all_pg, 'mongo': bk_all_mongo, 'oracle': bk_all_oracle}
+    func = switch.get(dbType, lambda: 'Not a valid dbType...')
+    output = func()
     return output
-'''
+
+
+def restore_all_dbs(dbType):
+    switch = {'postgres': restore_all_pg, 'mongo': restore_all_mongo, 'oracle': restore_all_oracle}
+    func = switch.get(dbType, lambda: 'Not a valid dbType...')
+    output = func()
+    return output
+
 
 # POSTGRES
 '''

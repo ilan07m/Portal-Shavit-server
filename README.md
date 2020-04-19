@@ -1,4 +1,4 @@
-# Portal-Shavit-server
+# Portal-Shavit-Server
 Server side of portal shavit
 * [Installation](#installation)
 * [Built With](#built-With)
@@ -32,6 +32,8 @@ python app.py
   - [GET /api/v1/shavit/actions/servers/service?serverName=<SERVER_NAME>&serviceName=<SERVICE_NAME>&actionType=<ACTION_TYPE>](#get-apiv1shavitactionsserversserviceserverNameserver_nameserviceNameservice_nameactionTypeaction_type)
   - [GET /api/v1/shavit/dbs](#get-apiv1shavitdbs)
   - [GET /api/v1/shavit/dbs?dbType=<DB_NAME>](#get-apiv1shavitdbsdbtypedb_name)
+  - [GET /api/v1/shavit/dbs/backup?dbType=<DB_NAME>](#get-apiv1shavitdbsbackupdbtypedb_name)
+  - [GET /api/v1/shavit/dbs/restore?dbType=<DB_NAME>](#get-apiv1shavitdbsrestoredbtypedb_name)
   
  
  
@@ -135,3 +137,19 @@ Response body:
       "template1", 
       "template0"
     ]
+    
+### GET /api/v1/shavit/dbs/backup?dbType=<DB_NAME>
+
+Example: http://localhost:5000/api/v1/shavit/dbs/backup?dbType=postgres
+
+Response body:
+
+    '<DB_NAME> backup of all dbs is done!' /OR/ 'ERROR'
+    
+### GET /api/v1/shavit/dbs/restore?dbType=<DB_NAME>
+
+Example: http://localhost:5000/api/v1/shavit/dbs/restore?dbType=postgres
+
+Response body:
+
+    '<DB_NAME> restore of all dbs is done!' /OR/ 'ERROR'

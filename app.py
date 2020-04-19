@@ -77,5 +77,30 @@ def api_get_dbs():
     return jsonify(output)
 
 
+# http://localhost:5000/api/v1/shavit/dbs/backup?dbType=postgres
+# Takes backup of ALL dbs of postgres / mongo / oracle
+@app.route('/api/v1/shavit/dbs/backup', methods=['GET'])
+def api_backup_all_dbs():
+    if 'dbType' in request.args:
+        dbType = str(request.args['dbType'])
+    elif 'dbType' not in request.args:
+        return 'Error: Bad arguments. Please specify valid dbType! (postgres / mongo / oracle)'
+    output = backup_all_dbs(dbType)
+    return jsonify(output)
+
+
+# http://localhost:5000/api/v1/shavit/dbs/restore?dbType=postgres
+# Restores ALL dbs of postgres / mongo / oracle
+@app.route('/api/v1/shavit/dbs/restore', methods=['GET'])
+def api_restore_all_dbs():
+    if 'dbType' in request.args:
+        dbType = str(request.args['dbType'])
+    elif 'dbType' not in request.args:
+        return 'Error: Bad arguments. Please specify valid dbType! (postgres / mongo / oracle)'
+    output = restore_all_dbs(dbType)
+    return jsonify(output)
+
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
