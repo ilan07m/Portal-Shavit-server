@@ -20,39 +20,6 @@
     }
   ],
   "paths": {
-    "/api/v1/shavit/resources/books/all": {
-      "post": {
-        "tags": [
-          "Matzov Requests"
-        ],
-        "summary": "Create a new book request system",
-        "requestBody": {
-          "description": "Book Request Post Object",
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/bookRequestPostBody"
-              }
-            }
-          }
-        },
-        "produces": [
-          "application/json"
-        ],
-        "responses": {
-          "201": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/components/schemas/id"
-            }
-          },
-          "400": {
-            "description": "Failed. Bad post data."
-          }
-        }
-      }
-    },
     "/api/v1/shavit/resources/users/all": {
       "get": {
         "tags": [
@@ -127,7 +94,256 @@
         }
       }
     },
-    "/api/v1/shavit/resources/books?id={id}": {
+    "/api/v1/shavit/actions/servers/service?serverName=<SERVER_NAME>&serviceName=<SERVICE_NAME>&actionType=<ACTION_TYPE>": {
+      "parameters": [
+        {
+          "name": "serverName",
+          "in": "path",
+          "required": true,
+          "description": "The name of the wanted server",
+          "type": "string"
+        },
+        {
+          "name": "serviceName",
+          "in": "path",
+          "required": true,
+          "description": "The name of the wanted service",
+          "type": "string"
+        },
+        {
+          "name": "actionType",
+          "in": "path",
+          "required": true,
+          "description": "The wanted action type: status / start / stop / restart",
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": [
+          "Shavit Requests"
+        ],
+        "summary": "Performs the wanted action on wanted service on the wanted server",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "serverName",
+            "required": true,
+            "description": "The name of the wanted server",
+            "schema": {
+              "$ref": "#/components/schemas/serverName"
+            }
+          },
+          {
+            "in": "path",
+            "name": "serviceName",
+            "required": true,
+            "description": "The name of the wanted service",
+            "schema": {
+              "$ref": "#/components/schemas/serviceName"
+            }
+          },
+          {
+            "in": "path",
+            "name": "actionType",
+            "required": true,
+            "description": "The wanted action on the service",
+            "schema": {
+              "$ref": "#/components/schemas/actionType"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/components/schemas/serverGroupNameRequest"
+            }
+          },
+          "400": {
+            "description": "Failed. Misunderstood Request."
+          },
+          "404": {
+            "description": "Failed. not found."
+          }
+        }
+      }
+    },
+    "/api/v1/shavit/dbs": {
+      "get": {
+        "tags": [
+          "Shavit Requests"
+        ],
+        "summary": "Returns all dbs",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/components/schemas/bookRequests"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/shavit/dbs?dbType=<DB_NAME>": {
+      "parameters": [
+        {
+          "name": "dbType",
+          "in": "path",
+          "required": true,
+          "description": "The name of wanted db which we want to see (all dbs in this db type)",
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": [
+          "Shavit Requests"
+        ],
+        "summary": "Get all dbs in given db type",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "dbType",
+            "required": true,
+            "description": "The name of the wanted db type",
+            "schema": {
+              "$ref": "#/components/schemas/dbType"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/components/schemas/serverGroupNameRequest"
+            }
+          },
+          "400": {
+            "description": "Failed. Misunderstood Request."
+          },
+          "404": {
+            "description": "Failed. serverGroupName not found."
+          }
+        }
+      }
+    },
+    "/api/v1/shavit/dbs/backup?dbType=<DB_NAME>": {
+      "parameters": [
+        {
+          "name": "dbType",
+          "in": "path",
+          "required": true,
+          "description": "The name of wanted db type which we want to backup (backups all dbs!)",
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": [
+          "Shavit Requests"
+        ],
+        "summary": "Backups the whole db of the dbType chosen",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "dbType",
+            "required": true,
+            "description": "The name of the wanted db type",
+            "schema": {
+              "$ref": "#/components/schemas/dbType"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/components/schemas/serverGroupNameRequest"
+            }
+          },
+          "400": {
+            "description": "Failed. Misunderstood Request."
+          },
+          "404": {
+            "description": "Failed. serverGroupName not found."
+          }
+        }
+      }
+    },
+    "/api/v1/shavit/dbs/restore?dbType=<DB_NAME>": {
+      "parameters": [
+        {
+          "name": "dbType",
+          "in": "path",
+          "required": true,
+          "description": "The name of wanted db type which we want to restore (restores all dbs!)",
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": [
+          "Shavit Requests"
+        ],
+        "summary": "Restores the whole db of the dbType chosen",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "dbType",
+            "required": true,
+            "description": "The name of the wanted db type",
+            "schema": {
+              "$ref": "#/components/schemas/dbType"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/components/schemas/serverGroupNameRequest"
+            }
+          },
+          "400": {
+            "description": "Failed. Misunderstood Request."
+          },
+          "404": {
+            "description": "Failed. serverGroupName not found."
+          }
+        }
+      }
+    },
+    "/api/v1/matzov/resources/books/all": {
+      "post": {
+        "tags": [
+          "Matzov Requests"
+        ],
+        "summary": "Create a new book request system",
+        "requestBody": {
+          "description": "Book Request Post Object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/bookRequestPostBody"
+              }
+            }
+          }
+        },
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "201": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/components/schemas/id"
+            }
+          },
+          "400": {
+            "description": "Failed. Bad post data."
+          }
+        }
+      }
+    },
+    "/api/v1/matzov/resources/books?id={id}": {
       "parameters": [
         {
           "name": "id",
@@ -139,7 +355,7 @@
       ],
       "get": {
         "tags": [
-          "Shavit Requests"
+          "Matzov Requests"
         ],
         "summary": "Get book request with given ID",
         "parameters": [
@@ -253,6 +469,34 @@
         }
       },
       "serverGroupName": {
+        "properties": {
+          "uuid": {
+            "type": "string"
+          }
+        }
+      },
+      "serverName": {
+        "properties": {
+          "uuid": {
+            "type": "string"
+          }
+        }
+      },
+      "serviceName": {
+        "properties": {
+          "uuid": {
+            "type": "string"
+          }
+        }
+      },
+      "actionType": {
+        "properties": {
+          "uuid": {
+            "type": "string"
+          }
+        }
+      },
+      "dbType": {
         "properties": {
           "uuid": {
             "type": "string"
