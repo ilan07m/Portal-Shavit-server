@@ -20,7 +20,7 @@
     }
   ],
   "paths": {
-    "/api/v1/shavit/resources/users/all": {
+    "/api/v1/shavit/resources/users": {
       "get": {
         "tags": [
           "Shavit Requests"
@@ -36,7 +36,7 @@
         }
       }
     },
-    "/api/v1/shavit/resources/servers/all": {
+    "/api/v1/shavit/resources/servers": {
       "get": {
         "tags": [
           "Shavit Requests"
