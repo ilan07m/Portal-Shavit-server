@@ -94,7 +94,7 @@
         }
       }
     },
-    "/api/v1/shavit/actions/servers/service?serverName=<SERVER_NAME>&serviceName=<SERVICE_NAME>&actionType=<ACTION_TYPE>": {
+    "/api/v1/shavit/actions/servers/service?serverName={serverName}&serviceName={serviceName}&actionType={actionType}": {
       "parameters": [
         {
           "name": "serverName",
@@ -184,7 +184,7 @@
         }
       }
     },
-    "/api/v1/shavit/dbs?dbType=<DB_NAME>": {
+    "/api/v1/shavit/dbs?dbType={dbType}": {
       "parameters": [
         {
           "name": "dbType",
@@ -226,7 +226,7 @@
         }
       }
     },
-    "/api/v1/shavit/dbs/backup?dbType=<DB_NAME>": {
+    "/api/v1/shavit/dbs/backup?dbType={dbType}": {
       "parameters": [
         {
           "name": "dbType",
@@ -268,7 +268,7 @@
         }
       }
     },
-    "/api/v1/shavit/dbs/restore?dbType=<DB_NAME>": {
+    "/api/v1/shavit/dbs/restore?dbType={dbType}": {
       "parameters": [
         {
           "name": "dbType",
