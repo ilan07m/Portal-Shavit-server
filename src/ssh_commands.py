@@ -21,3 +21,17 @@ def run_command(command, ssh):
         print(error)
     ssh.close()
     return output
+
+
+# Runs the commands on the server
+def run_multiple_commands(commands, ssh):
+    returnOutput = []
+    for command in commands:
+        stdin, stdout, stderr = ssh.exec_command(command)
+        output = stdout.read()
+        returnOutput.append(output)
+        error = stderr.readlines()
+        if len(error) != 0:
+            print(error)
+    ssh.close()
+    return returnOutput
