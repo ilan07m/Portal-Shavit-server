@@ -1,6 +1,7 @@
 import flask
 from flask import request, jsonify, send_from_directory
 from resources.servers import *
+from resources.services import *
 from src.service_actions import *
 from src.db_actions import *
 from resources.login_details import *
@@ -61,6 +62,22 @@ def api_service_action():
         return "Error: Bad arguments. Please specify valid server and service name, and action type!"
     output = action_on_service(request.args, actionType, MY_USERNAME, MY_PASS)
     return output
+
+
+# TODO: ################################################
+# TODO: Add to swagger.json and README.md files!!!!!!! #
+# TODO: ################################################
+# http://localhost:5000/api/v1/shavit/resources/servers/services?serverGroupName=openshift
+# Returs all the services wanted for the servers in server group chosen
+# Checks if the service is valid from services.py file!
+@app.route('/api/v1/shavit/resources/servers/services', methods=['GET'])
+def api_all_services_of_server_type():
+    if 'serverGroupName' in request.args:
+        serverGroupName = str(request.args['serverGroupName']).upper()
+    else:
+        return "Error: Bad arguments. Please specify valid server group name!"
+    output = get_all_services_of_server_group(serverGroupName)
+    return jsonify(output)
 
 
 # http://localhost:5000/api/v1/shavit/dbs

@@ -29,6 +29,7 @@ python app.py
   - [GET /api/v1/shavit/resources/users](#get-apiv1shavitresourcesusers)
   - [GET /api/v1/shavit/resources/servers](#get-apiv1shavitresourcesservers)
   - [GET /api/v1/shavit/resources/servers?serverGroupName=<SERVER_GROUP_NAME>](#get-apiv1shavitresourcesserversservergroupnameserver_group_name)
+  - [GET /api/v1/shavit/resources/servers/services?serverGroupName=<SERVER_GROUP_NAME>](#get-apiv1shavitresourcesserversservicesservergroupnameserver_group_name)
   - [GET /api/v1/shavit/actions/servers/service?serverName=<SERVER_NAME>&serviceName=<SERVICE_NAME>&actionType=<ACTION_TYPE>](#get-apiv1shavitactionsserversserviceserverNameserver_nameserviceNameservice_nameactionTypeaction_type)
   - [GET /api/v1/shavit/dbs](#get-apiv1shavitdbs)
   - [GET /api/v1/shavit/dbs?dbType=<DB_NAME>](#get-apiv1shavitdbsdbtypedb_name)
@@ -96,12 +97,21 @@ Example: http://localhost:5000/api/v1/shavit/resources/servers?serverGroupName=p
 Response body:
 
     [
-        {
-            "name": "pg1"
-        }, 
-        {
-            "name": "pg2"
-        }
+        "pg1", 
+        "pg2"
+    ]
+    
+### GET /api/v1/shavit/resources/servers/services?serverGroupName=<SERVER_GROUP_NAME>
+
+Example: http://localhost:5000/api/v1/shavit/resources/servers/services?serverGroupName=openshift
+
+Response body:
+
+    [
+        "atomic-openshift-node", 
+        "docker",
+        "firewalld",
+        "iptables"
     ]
 
 ### GET /api/v1/shavit/actions/servers/service?serverName=<SERVER_NAME>&serviceName=<SERVICE_NAME>&actionType=<ACTION_TYPE>
