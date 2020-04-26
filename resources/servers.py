@@ -124,5 +124,7 @@ def return_all_servers_of_group(serverGroupName):
     for servers in SERVERS:
         for serverGroup in servers:
             if serverGroup == serverGroupName:
-                results.append(servers[serverGroup])
-    return results[0]
+                for server in servers[serverGroup]:
+                    results.append(server['name'])
+                    print(server['name'])
+    return results
