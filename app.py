@@ -4,6 +4,7 @@ from resources.servers import *
 from resources.services import *
 from src.service_actions import *
 from src.db_actions import *
+from src.openshift_actions import *
 from resources.login_details import *
 from src.swagger import swaggerui_blueprint, SWAGGER_URL, REQUEST_API
 DEBUG_MODE = True  # Change to False if you want to run without debug mode!
@@ -64,9 +65,6 @@ def api_service_action():
     return output
 
 
-# TODO: ################################################
-# TODO: Add to swagger.json and README.md files!!!!!!! #
-# TODO: ################################################
 # http://localhost:5000/api/v1/shavit/resources/servers/services?serverGroupName=openshift
 # Returs all the services wanted for the servers in server group chosen
 # Checks if the service is valid from services.py file!
@@ -115,6 +113,47 @@ def api_restore_all_dbs():
     elif 'dbType' not in request.args:
         return 'Error: Bad arguments. Please specify valid dbType! (postgres / mongo / oracle)'
     output = restore_all_dbs(dbType)
+    return jsonify(output)
+
+
+# TODO: ################################################
+# TODO: Add to swagger.json and README.md files!!!!!!! #
+# TODO: ################################################
+# TODO: Login to ocp cluster as wanted user, infra or simple user
+# TODO: Change params to func to be not hard-coded
+# http://localhost:5000/api/v1/shavit/ocp/login
+# Login to ocp cluster
+@app.route('/api/v1/shavit/ocp/login', methods=['GET'])
+def ocp_login():
+    output = oc_login(MY_USERNAME, MY_PASS, OCP_ROOT_USERNAME, OCP_ROOT_PASSWORD, TEMP_SERVER_NAME)
+    return jsonify(output)
+
+
+# TODO: ################################################
+# TODO: Add to swagger.json and README.md files!!!!!!! #
+# TODO: ################################################
+# TODO: Change params to func to be not hard-coded
+# http://localhost:5000/api/v1/shavit/ocp/projects
+# Returns all projects in the ocp cluster
+@app.route('/api/v1/shavit/ocp/projects', methods=['GET'])
+def ocp_all_projects():
+    output = oc_projects(MY_USERNAME, MY_PASS, OCP_ROOT_USERNAME, OCP_ROOT_PASSWORD, TEMP_SERVER_NAME)
+    return jsonify(output)
+
+
+# TODO: ################################################
+# TODO: Add to swagger.json and README.md files!!!!!!! #
+# TODO: ################################################
+# TODO: Change params to func to be not hard-coded
+# http://localhost:5000/api/v1/shavit/ocp/services?project=myproject
+# Returns all services in chosen project
+@app.route('/api/v1/shavit/ocp/services', methods=['GET'])
+def ocp_get_all_svc_in_project():
+    if 'project' in request.args:
+        project = str(request.args['project'])
+    elif 'project' not in request.args:
+        return 'Error: Bad arguments. Please specify valid project name!'
+    output = oc_services_in_project(MY_USERNAME, MY_PASS, OCP_ROOT_USERNAME, OCP_ROOT_PASSWORD, project, TEMP_SERVER_NAME)
     return jsonify(output)
 
 
