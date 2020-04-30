@@ -35,6 +35,9 @@ python app.py
   - [GET /api/v1/shavit/dbs?dbType=<DB_NAME>](#get-apiv1shavitdbsdbtypedb_name)
   - [GET /api/v1/shavit/dbs/backup?dbType=<DB_NAME>](#get-apiv1shavitdbsbackupdbtypedb_name)
   - [GET /api/v1/shavit/dbs/restore?dbType=<DB_NAME>](#get-apiv1shavitdbsrestoredbtypedb_name)
+  - [GET /api/v1/shavit/ocp/login/infra](#get-apiv1shavitocplogininfra)
+  - [GET /api/v1/shavit/ocp/projects](#get-apiv1shavitocpprojects)
+  - [GET /api/v1/shavit/ocp/services?project=<PROJECT_NAME>](#get-apiv1shavitocpservicesprojectproject_name)
   
  
  
@@ -163,3 +166,34 @@ Example: http://localhost:5000/api/v1/shavit/dbs/restore?dbType=postgres
 Response body:
 
     '<DB_NAME> restore of all dbs is done!' /OR/ 'ERROR'
+
+### GET /api/v1/shavit/ocp/login/infra
+
+Example: http://localhost:5000/api/v1/shavit/ocp/login/infra
+
+Response body:
+
+    'Login succeeded! Logged in as infra .......'
+    
+### GET /api/v1/shavit/ocp/projects
+
+Example: http://localhost:5000/api/v1/shavit/ocp/projects
+
+Response body:
+
+    [
+      "myproject", 
+      "myproject2", 
+      "myproject3"
+    ]
+    
+### GET /api/v1/shavit/ocp/services?project=<PROJECT_NAME>
+
+Example: http://localhost:5000/api/v1/shavit/ocp/services?project=myproject
+
+Response body:
+
+    [
+        "mysql", 
+        "ruby-hello-world"
+    ]

@@ -310,6 +310,80 @@
         }
       }
     },
+    "/api/v1/shavit/ocp/login/infra": {
+      "get": {
+        "tags": [
+          "Shavit Requests"
+        ],
+        "summary": "Logs in to ocp cluster as infra",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/components/schemas/bookRequests"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/shavit/ocp/projects": {
+      "get": {
+        "tags": [
+          "Shavit Requests"
+        ],
+        "summary": "Returns all projects in the ocp cluster",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/components/schemas/bookRequests"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/shavit/ocp/services?project={projectName}": {
+      "parameters": [
+        {
+          "name": "projectName",
+          "in": "path",
+          "required": true,
+          "description": "The name of the project in the ocp cluster",
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": [
+          "Shavit Requests"
+        ],
+        "summary": "Get all services in given project in the ocp cluster",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "projectName",
+            "required": true,
+            "description": "The name of the project in the ocp cluster",
+            "schema": {
+              "$ref": "#/components/schemas/projectName"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/components/schemas/serverGroupNameRequest"
+            }
+          },
+          "400": {
+            "description": "Failed. Misunderstood Request."
+          },
+          "404": {
+            "description": "Failed. serverGroupName not found."
+          }
+        }
+      }
+    },
     "/api/v1/matzov/resources/books/all": {
       "post": {
         "tags": [
@@ -497,6 +571,13 @@
         }
       },
       "dbType": {
+        "properties": {
+          "uuid": {
+            "type": "string"
+          }
+        }
+      },
+      "projectName": {
         "properties": {
           "uuid": {
             "type": "string"
