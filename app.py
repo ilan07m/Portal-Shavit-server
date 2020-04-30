@@ -116,22 +116,16 @@ def api_restore_all_dbs():
     return jsonify(output)
 
 
-# TODO: ################################################
-# TODO: Add to swagger.json and README.md files!!!!!!! #
-# TODO: ################################################
 # TODO: Login to ocp cluster as wanted user, infra or simple user
 # TODO: Change params to func to be not hard-coded
 # http://localhost:5000/api/v1/shavit/ocp/login
 # Login to ocp cluster
-@app.route('/api/v1/shavit/ocp/login', methods=['GET'])
-def ocp_login():
-    output = oc_login(MY_USERNAME, MY_PASS, OCP_ROOT_USERNAME, OCP_ROOT_PASSWORD, TEMP_SERVER_NAME)
-    return jsonify(output)
+@app.route('/api/v1/shavit/ocp/login/infra', methods=['GET'])
+def ocp_root_login():
+    output = oc_root_login(MY_USERNAME, MY_PASS, OCP_ROOT_USERNAME, OCP_ROOT_PASSWORD, TEMP_SERVER_NAME)
+    return output
 
 
-# TODO: ################################################
-# TODO: Add to swagger.json and README.md files!!!!!!! #
-# TODO: ################################################
 # TODO: Change params to func to be not hard-coded
 # http://localhost:5000/api/v1/shavit/ocp/projects
 # Returns all projects in the ocp cluster
@@ -141,9 +135,6 @@ def ocp_all_projects():
     return jsonify(output)
 
 
-# TODO: ################################################
-# TODO: Add to swagger.json and README.md files!!!!!!! #
-# TODO: ################################################
 # TODO: Change params to func to be not hard-coded
 # http://localhost:5000/api/v1/shavit/ocp/services?project=myproject
 # Returns all services in chosen project
