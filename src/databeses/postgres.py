@@ -4,7 +4,9 @@ from resources.login_details import *
 PG_GET_ALL_DBS_COMMAND = "SELECT datname FROM pg_database;"
 PG_BACKUP_ALL_COMMAND = "pg_dumpall --clean -f "  # Need to insert the dmp file name
 PG_RESTORE_ALL_COMMAND = "psql -f "  # Need to insert the dmp file name
-PG_DMP_DIR = "~/pgbackups/{}"  # format with whole/db/schema"
+# TODO: Change dir where backup files are!
+PG_DMP_DIR = "~/pgbackups/{}/"  # format with whole/db/schema"
+LIST_FILE_NAMES = "ls -A1"
 
 
 def pg_dbs():
@@ -26,25 +28,47 @@ def pg_dbs():
 # TODO: Change the server name, the username and the password!!! + get dmp file as parameter!!!
 def pg_backup_all():
     output = run_command(PG_BACKUP_ALL_COMMAND + "pg_bk_dump.dmp", connect_to_server(TEMP_SERVER_NAME, MY_USERNAME, MY_PASS))
-    return 'PG backup of all dbs is done!' + output
+    return 'PG backup of all dbs is done!'
 
 
 # TODO: Change the server name, the username and the password!!! + get dmp file as parameter!!!
+# TODO: Make it work!
 def pg_restore_all():
     output = run_command(PG_RESTORE_ALL_COMMAND + "pg_bk_dump.dmp", connect_to_server(TEMP_SERVER_NAME, MY_USERNAME, MY_PASS))
-    return 'PG restore of all dbs is done!' + output
+    return 'PG restore of all dbs is done!'
 
 
-def pg_restore_db(dbName):
+def pg_backup_files_of_all():
+    path = PG_DMP_DIR.format("whole")
+    dmpList = []
+    command = "cd {}; ls -A1".format(path)
+    output = run_command(command, connect_to_server(TEMP_SERVER_NAME, MY_USERNAME, MY_PASS))
+    splitedfiles = output.splitlines()
+    for project in splitedfiles:
+        dmpList.append(project.decode('UTF-8'))
+    return dmpList
+
+
+def pg_backup_files_of_db():
     path = PG_DMP_DIR.format("db")
-    print(path)
-    return 'PG restore of db is done'
+    dmpList = []
+    command = "cd {}; ls -A1".format(path)
+    output = run_command(command, connect_to_server(TEMP_SERVER_NAME, MY_USERNAME, MY_PASS))
+    splitedfiles = output.splitlines()
+    for project in splitedfiles:
+        dmpList.append(project.decode('UTF-8'))
+    return dmpList
 
 
-def pg_restore_schema(schemaName):
+def pg_backup_files_of_schema():
     path = PG_DMP_DIR.format("schema")
-    print(path)
-    return 'PG restore of schema is done'
+    dmpList = []
+    command = "cd {}; ls -A1".format(path)
+    output = run_command(command, connect_to_server(TEMP_SERVER_NAME, MY_USERNAME, MY_PASS))
+    splitedfiles = output.splitlines()
+    for project in splitedfiles:
+        dmpList.append(project.decode('UTF-8'))
+    return dmpList
 
 
 # TODO: Get DB name, user and password as parameter at every function that needs specific user

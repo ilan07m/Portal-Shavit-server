@@ -95,6 +95,29 @@ def api_get_dbs():
 # TODO: ################################################
 # TODO: Add to swagger.json and README.md files!!!!!!! #
 # TODO: ################################################
+# http://localhost:5000/api/v1/shavit/dbs/backup_files?dbType=postgres&resourceType=all
+# Get dmps of ALL dbs of postgres / mongo / oracle
+# http://localhost:5000/api/v1/shavit/dbs/backup_files?dbType=postgres&resourceType=db
+# Get dmps of SPECIFIC db of postgres / mongo / oracle
+# http://localhost:5000/api/v1/shavit/dbs/backup_files?dbType=postgres&resourceType=schema
+# Get dmps of SPECIFIC schema of postgres / oracle
+# http://localhost:5000/api/v1/shavit/dbs/backup_files?dbType=mongo&resourceType=collection
+# Get dmps of SPECIFIC collection of mongo
+@app.route('/api/v1/shavit/dbs/backup_files', methods=['GET'])
+def api_get_dump_files_to_restore_from_dbs():
+    if ('dbType' in request.args) and ('resourceType' in request.args):
+        dbType = str(request.args['dbType'])
+        resourceType = str(request.args['resourceType'])
+    elif 'dbType' not in request.args:
+        return 'Error: Bad arguments. Please specify valid dbType! (postgres / mongo / oracle)'
+    output = backup_files_by_type(dbType, resourceType)
+    return jsonify(output)
+
+
+
+# TODO: ################################################
+# TODO: Add to swagger.json and README.md files!!!!!!! #
+# TODO: ################################################
 # TODO: Check with wanted user to see if correct owner of db
 # http://localhost:5000/api/v1/shavit/dbs/create?dbType=postgres&dbName=testdb
 # Creates new db in postgres / mongo / oracle
