@@ -1,22 +1,24 @@
-import psycopg2
+from psycopg2 import connect, extensions, sql, Error
 from ..ssh_commands import *
 from resources.login_details import *
 PG_GET_ALL_DBS_COMMAND = "SELECT datname FROM pg_database;"
 PG_BACKUP_ALL_COMMAND = "pg_dumpall --clean -f "  # Need to insert the dmp file name
 PG_RESTORE_ALL_COMMAND = "psql -f "  # Need to insert the dmp file name
+PG_DMP_DIR = "~/pgbackups/{}"  # format with whole/db/schema"
 
 
 def pg_dbs():
     dbList = []
     try:
         # TODO: Change host name
-        db_conn = psycopg2.connect(host=TEMP_SERVER_NAME, port=PG_PORT, dbname=PG_MAIN_DB, user=PG_ROOT_USER,
+        db_conn = connect(host=TEMP_SERVER_NAME, port=PG_PORT, dbname=PG_MAIN_DB, user=PG_ROOT_USER,
                                    password=PG_ROOT_PASSWORD)
         db_cursor = db_conn.cursor()
         db_cursor.execute(PG_GET_ALL_DBS_COMMAND)
         for database in db_cursor.fetchall():
-            dbList.append(database[0])
-    except psycopg2.Error as e:
+            if not database[0].startswith('template'):
+                dbList.append(database[0])
+    except Error as e:
         print(e)
     return dbList
 
@@ -32,4 +34,33 @@ def pg_restore_all():
     output = run_command(PG_RESTORE_ALL_COMMAND + "pg_bk_dump.dmp", connect_to_server(TEMP_SERVER_NAME, MY_USERNAME, MY_PASS))
     return 'PG restore of all dbs is done!' + output
 
+
+def pg_restore_db(dbName):
+    path = PG_DMP_DIR.format("db")
+    print(path)
+    return 'PG restore of db is done'
+
+
+def pg_restore_schema(schemaName):
+    path = PG_DMP_DIR.format("schema")
+    print(path)
+    return 'PG restore of schema is done'
+
+
 # TODO: Get DB name, user and password as parameter at every function that needs specific user
+
+
+def create_pg_db(dbName):
+    try:
+        db_conn = connect(host=TEMP_SERVER_NAME, port=PG_PORT, dbname=PG_MAIN_DB, user=PG_ROOT_USER,
+                                   password=PG_ROOT_PASSWORD)
+        autocommit = extensions.ISOLATION_LEVEL_AUTOCOMMIT
+        db_conn.set_isolation_level(autocommit)
+        db_cursor = db_conn.cursor()
+        # use the sql module instead to avoid SQL injection attacks
+        db_cursor.execute(sql.SQL("CREATE DATABASE {}").format(sql.Identifier(dbName)))
+        db_cursor.close()
+        db_conn.close()
+        return "done!"
+    except Error as e:
+        return e

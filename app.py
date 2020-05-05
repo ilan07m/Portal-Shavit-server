@@ -92,6 +92,23 @@ def api_get_dbs():
     return jsonify(output)
 
 
+# TODO: ################################################
+# TODO: Add to swagger.json and README.md files!!!!!!! #
+# TODO: ################################################
+# TODO: Check with wanted user to see if correct owner of db
+# http://localhost:5000/api/v1/shavit/dbs/create?dbType=postgres&dbName=testdb
+# Creates new db in postgres / mongo / oracle
+@app.route('/api/v1/shavit/dbs/create', methods=['GET'])
+def api_create_db():
+    if ('dbType' in request.args) and ('dbName' in request.args):
+        dbType = str(request.args['dbType'])
+        dbName = str(request.args['dbName'])
+    else:
+        return "Error: Bad arguments. Please specify valid db type and new db name!"
+    output = crete_db(dbType, dbName)
+    return str(output)
+
+
 # http://localhost:5000/api/v1/shavit/dbs/backup?dbType=postgres
 # Takes backup of ALL dbs of postgres / mongo / oracle
 @app.route('/api/v1/shavit/dbs/backup', methods=['GET'])
