@@ -1,9 +1,9 @@
 from .databeses.postgres import *
 from .databeses.mongo import *
 from .databeses.oracle import *
-'''POSTGRES = 'postgres'
+POSTGRES = 'postgres'
 MONGO = 'mongo'
-ORACLE = 'oracle' '''
+ORACLE = 'oracle'
 ALL = 'all'
 DB = 'db'
 SCHEMA = 'schema'
@@ -19,41 +19,54 @@ def get_all_dbs(dbType):
 
 # Get dmp files section
 def backup_files_of_all_dbs(dbType):
-    switch = {'postgres': pg_backup_files_of_all(),
-              'mongo': mongo_backup_files_of_all(),
-              'oracle': oracle_backup_files_of_all()}
-    func = switch.get(dbType, lambda: 'Not a valid dbType...')
-    return func
+    if dbType == POSTGRES:
+        return pg_backup_files_of_all()
+    elif dbType == MONGO:
+        return mongo_backup_files_of_all()
+    elif dbType == ORACLE:
+        return oracle_backup_files_of_all()
+    else:
+        return "Error! not a valid db type..."
 
 
 def backup_files_of_specific_db(dbType):
-    switch = {'postgres': pg_backup_files_of_db(),
-              'mongo': mongo_backup_files_of_db(),
-              'oracle': oracle_backup_files_of_db()}
-    func = switch.get(dbType, lambda: 'Not a valid dbType...')
-    return func
+    if dbType == POSTGRES:
+        return pg_backup_files_of_db()()
+    elif dbType == MONGO:
+        return mongo_backup_files_of_db()
+    elif dbType == ORACLE:
+        return oracle_backup_files_of_db()
+    else:
+        return "Error! not a valid db type..."
 
 
 def backup_files_of_specific_schema(dbType):
-    switch = {'postgres': pg_backup_files_of_schema(),
-              'oracle': oracle_backup_files_of_schema()}
-    func = switch.get(dbType, lambda: 'Not a valid dbType...')
-    return func
+    if dbType == POSTGRES:
+        return pg_backup_files_of_schema()()
+    elif dbType == ORACLE:
+        return oracle_backup_files_of_schema()
+    else:
+        return "Error! not a valid db type..."
 
 
 def backup_files_of_specific_collection(dbType):
-    switch = {'mongo': mongo_backup_files_of_collection()}
-    func = switch.get(dbType, lambda: 'Not a valid dbType...')
-    return func
+    if dbType == MONGO:
+        return mongo_backup_files_of_collection()
+    else:
+        return "Error! not a valid db type..."
 
 
 def backup_files_by_type(dbType, resourceType):
-    switch = {'all': backup_files_of_all_dbs(dbType),
-              'db': backup_files_of_specific_db(dbType),
-              'schema': backup_files_of_specific_schema(dbType),
-              'collection': backup_files_of_specific_collection(dbType)}
-    func = switch.get(resourceType, lambda: 'Not a valid dbType...')
-    return func
+    if resourceType == ALL:
+        return backup_files_of_all_dbs(dbType)
+    elif resourceType == DB:
+        return backup_files_of_specific_db(dbType)
+    elif resourceType == SCHEMA:
+        return backup_files_of_specific_schema(dbType)
+    elif resourceType == COLLECTION:
+        return backup_files_of_specific_collection(dbType)
+    else:
+        return "Error! not a valid resource type..."
 
 
 # Backup section
@@ -99,6 +112,14 @@ def restore_by_type2(dbType, resourceType, args):
 
 # Create section
 def crete_db(dbType, dbName):
-    switch = {'postgres': create_pg_db(dbName), 'mongo': create_mongo_db(dbName), 'oracle': create_oracle_db(dbName)}
+    if dbType == POSTGRES:
+        return create_pg_db(dbName)
+    elif dbType == MONGO:
+        return create_mongo_db(dbName)
+    elif dbType == ORACLE:
+        return create_oracle_db(dbName)
+    else:
+        return "Error! not a valid db type..."
+    ''' switch = {'postgres': create_pg_db(dbName), 'mongo': create_mongo_db(dbName), 'oracle': create_oracle_db(dbName)}
     func = switch.get(dbType, lambda: 'Not a valid dbType...')
-    return func
+    return func'''

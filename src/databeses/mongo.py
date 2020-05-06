@@ -31,6 +31,7 @@ def mongo_restore_all():
 
 def mongo_backup_files_of_all():
     path = MONGO_DMP_DIR.format("whole")
+    print(path)
     dmpList = []
     command = "cd {}; ls -A1".format(path)
     output = run_command(command, connect_to_server(TEMP_SERVER_NAME, MY_USERNAME, MY_PASS))
@@ -42,6 +43,7 @@ def mongo_backup_files_of_all():
 
 def mongo_backup_files_of_db():
     path = MONGO_DMP_DIR.format("db")
+    print(path)
     dmpList = []
     command = "cd {}; ls -A1".format(path)
     output = run_command(command, connect_to_server(TEMP_SERVER_NAME, MY_USERNAME, MY_PASS))
@@ -53,6 +55,7 @@ def mongo_backup_files_of_db():
 
 def mongo_backup_files_of_collection():
     path = MONGO_DMP_DIR.format("collection")
+    print(path)
     dmpList = []
     command = "cd {}; ls -A1".format(path)
     output = run_command(command, connect_to_server(TEMP_SERVER_NAME, MY_USERNAME, MY_PASS))

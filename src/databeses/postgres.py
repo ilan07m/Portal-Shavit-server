@@ -40,6 +40,7 @@ def pg_restore_all():
 
 def pg_backup_files_of_all():
     path = PG_DMP_DIR.format("whole")
+    print(path)
     dmpList = []
     command = "cd {}; ls -A1".format(path)
     output = run_command(command, connect_to_server(TEMP_SERVER_NAME, MY_USERNAME, MY_PASS))
@@ -51,6 +52,7 @@ def pg_backup_files_of_all():
 
 def pg_backup_files_of_db():
     path = PG_DMP_DIR.format("db")
+    print(path)
     dmpList = []
     command = "cd {}; ls -A1".format(path)
     output = run_command(command, connect_to_server(TEMP_SERVER_NAME, MY_USERNAME, MY_PASS))
@@ -62,6 +64,7 @@ def pg_backup_files_of_db():
 
 def pg_backup_files_of_schema():
     path = PG_DMP_DIR.format("schema")
+    print(path)
     dmpList = []
     command = "cd {}; ls -A1".format(path)
     output = run_command(command, connect_to_server(TEMP_SERVER_NAME, MY_USERNAME, MY_PASS))
