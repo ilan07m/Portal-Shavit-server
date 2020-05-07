@@ -156,7 +156,11 @@ Response body:
 ### GET /api/v1/shavit/dbs/backup_files?dbType=<DB_NAME>&resourceType=<RESOURCE_TYPE>
 
 Example: http://localhost:5000/api/v1/shavit/dbs/backup_files?dbType=postgres&resourceType=schema
-Resource types: all, db, schema, collection
+
+Resource types: 
+```bash
+all \ db \ schema \ collection
+```
 
 Response body:
 
