@@ -226,6 +226,64 @@
         }
       }
     },
+    "/api/v1/shavit/dbs/backup_files?dbType={dbType}&resourceType={resourceType}": {
+      "parameters": [
+        {
+          "name": "dbType",
+          "in": "path",
+          "required": true,
+          "description": "The name of wanted db type (postgres / mongo / oracle)",
+          "type": "string"
+        },
+        {
+          "name": "resourceType",
+          "in": "path",
+          "required": true,
+          "description": "The name of wanted resource type which we want to get dump files (all / db/ schema / collection)",
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": [
+          "Shavit Requests"
+        ],
+        "summary": "Get all the backup files of the dbType chosen",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "dbType",
+            "required": true,
+            "description": "The name of the wanted db type",
+            "schema": {
+              "$ref": "#/components/schemas/dbType"
+            }
+          },
+          {
+            "in": "path",
+            "name": "resourceType",
+            "required": true,
+            "description": "The name of wanted resource type which we want to get dump files (all / db/ schema / collection)",
+            "schema": {
+              "$ref": "#/components/schemas/resourceType"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/components/schemas/serverGroupNameRequest"
+            }
+          },
+          "400": {
+            "description": "Failed. Misunderstood Request."
+          },
+          "404": {
+            "description": "Failed. serverGroupName not found."
+          }
+        }
+      }
+    },
     "/api/v1/shavit/dbs/backup?dbType={dbType}": {
       "parameters": [
         {
@@ -291,6 +349,64 @@
             "description": "The name of the wanted db type",
             "schema": {
               "$ref": "#/components/schemas/dbType"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/components/schemas/serverGroupNameRequest"
+            }
+          },
+          "400": {
+            "description": "Failed. Misunderstood Request."
+          },
+          "404": {
+            "description": "Failed. serverGroupName not found."
+          }
+        }
+      }
+    },
+    "/api/v1/shavit/dbs/create?dbType={dbType}&dbName={dbName}": {
+      "parameters": [
+        {
+          "name": "dbType",
+          "in": "path",
+          "required": true,
+          "description": "The name of wanted db type (postgres / mongo / oracle)",
+          "type": "string"
+        },
+        {
+          "name": "dbName",
+          "in": "path",
+          "required": true,
+          "description": "The name of new db which we want to create in the db type chosen",
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": [
+          "Shavit Requests"
+        ],
+        "summary": "Creates new db in the dbType chosen",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "dbType",
+            "required": true,
+            "description": "The name of the wanted db type",
+            "schema": {
+              "$ref": "#/components/schemas/dbType"
+            }
+          },
+          {
+            "in": "path",
+            "name": "dbName",
+            "required": true,
+            "description": "The name of new db which we want to create in the db type chosen",
+            "schema": {
+              "$ref": "#/components/schemas/dbName"
             }
           }
         ],
@@ -571,6 +687,20 @@
         }
       },
       "dbType": {
+        "properties": {
+          "uuid": {
+            "type": "string"
+          }
+        }
+      },
+      "dbName": {
+        "properties": {
+          "uuid": {
+            "type": "string"
+          }
+        }
+      },
+      "resourceType": {
         "properties": {
           "uuid": {
             "type": "string"

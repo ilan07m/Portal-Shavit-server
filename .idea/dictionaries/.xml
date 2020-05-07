@@ -6,7 +6,9 @@
       <w>firewalld</w>
       <w>iptables</w>
       <w>logi</w>
+      <w>matzov</w>
       <w>openshift</w>
+      <w>shavit</w>
       <w>splunk</w>
     </words>
   </dictionary>

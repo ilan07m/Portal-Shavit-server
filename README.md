@@ -30,11 +30,13 @@ python app.py
   - [GET /api/v1/shavit/resources/servers](#get-apiv1shavitresourcesservers)
   - [GET /api/v1/shavit/resources/servers?serverGroupName=<SERVER_GROUP_NAME>](#get-apiv1shavitresourcesserversservergroupnameserver_group_name)
   - [GET /api/v1/shavit/resources/servers/services?serverGroupName=<SERVER_GROUP_NAME>](#get-apiv1shavitresourcesserversservicesservergroupnameserver_group_name)
-  - [GET /api/v1/shavit/actions/servers/service?serverName=<SERVER_NAME>&serviceName=<SERVICE_NAME>&actionType=<ACTION_TYPE>](#get-apiv1shavitactionsserversserviceserverNameserver_nameserviceNameservice_nameactionTypeaction_type)
+  - [GET /api/v1/shavit/actions/servers/service?serverName=<SERVER_NAME>&serviceName=<SERVICE_NAME>&actionType=<ACTION_TYPE>](#get-apiv1shavitactionsserversserviceservernameserver_nameservicenameservice_nameactiontypeaction_type)
   - [GET /api/v1/shavit/dbs](#get-apiv1shavitdbs)
   - [GET /api/v1/shavit/dbs?dbType=<DB_NAME>](#get-apiv1shavitdbsdbtypedb_name)
+  - [GET /api/v1/shavit/dbs/backup_files?dbType=<DB_NAME>&resourceType=<RESOURCE_TYPE>](#get-apiv1shavitdbsbackup_filesdbtypedb_nameresourcetyperesource_type)
   - [GET /api/v1/shavit/dbs/backup?dbType=<DB_NAME>](#get-apiv1shavitdbsbackupdbtypedb_name)
   - [GET /api/v1/shavit/dbs/restore?dbType=<DB_NAME>](#get-apiv1shavitdbsrestoredbtypedb_name)
+  - [GET /api/v1/shavit/dbs/create?dbType=<DB_TYPE>&dbName=<DB_NAME>](#get-apiv1shavitdbscreatedbtypedb_typedbnamedb_name)
   - [GET /api/v1/shavit/ocp/login/infra](#get-apiv1shavitocplogininfra)
   - [GET /api/v1/shavit/ocp/projects](#get-apiv1shavitocpprojects)
   - [GET /api/v1/shavit/ocp/services?project=<PROJECT_NAME>](#get-apiv1shavitocpservicesprojectproject_name)
@@ -151,6 +153,19 @@ Response body:
       "template0"
     ]
     
+### GET /api/v1/shavit/dbs/backup_files?dbType=<DB_NAME>&resourceType=<RESOURCE_TYPE>
+
+Example: http://localhost:5000/api/v1/shavit/dbs/backup_files?dbType=postgres&resourceType=schema
+Resource types: all, db, schema, collection
+
+Response body:
+
+    [
+        "pgschema1.dmp", 
+        "pgschema2.dmp", 
+        "pgschema3.dmp"
+    ]
+    
 ### GET /api/v1/shavit/dbs/backup?dbType=<DB_NAME>
 
 Example: http://localhost:5000/api/v1/shavit/dbs/backup?dbType=postgres
@@ -166,6 +181,14 @@ Example: http://localhost:5000/api/v1/shavit/dbs/restore?dbType=postgres
 Response body:
 
     '<DB_NAME> restore of all dbs is done!' /OR/ 'ERROR'
+    
+### GET /api/v1/shavit/dbs/create?dbType=<DB_TYPE>&dbName=<DB_NAME>
+
+Example: http://localhost:5000/api/v1/shavit/dbs/create?dbType=postgres&dbName=testdb
+
+Response body:
+
+    'done!'
 
 ### GET /api/v1/shavit/ocp/login/infra
 
