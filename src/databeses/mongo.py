@@ -7,6 +7,8 @@ MONGO_RESTORE_ALL_COMMAND = "mongorestore -u " + MONGO_ROOT_USER + " -p " + MONG
                             + " --authenticationDatabase admin --drop "  # Need to insert the dmp file name
 # TODO: Change dir where backup files are!
 MONGO_DMP_DIR = "~/mongobackups/{}"  # format with whole/db/collection
+LIST_COMMAND = 'cd {}; ls -A1'
+RESOURCE_ERROR = 'Not a valid resourceType...'
 
 
 def mongo_dbs():
@@ -29,36 +31,14 @@ def mongo_restore_all():
     return 'MONGO restore of all dbs is done!!'
 
 
-def mongo_backup_files_of_all():
-    path = MONGO_DMP_DIR.format("whole")
-    print(path)
+def get_mongo_backup_files_by_type(resourceType):
+    dirName = {'all': 'whole', 'db': 'db', 'collection': 'collection'}
+    resource = dirName.get(resourceType, RESOURCE_ERROR)
+    if resource == RESOURCE_ERROR:
+        return RESOURCE_ERROR
+    path = MONGO_DMP_DIR.format(resource)
     dmpList = []
-    command = "cd {}; ls -A1".format(path)
-    output = run_command(command, connect_to_server(TEMP_SERVER_NAME, MY_USERNAME, MY_PASS))
-    splitedfiles = output.splitlines()
-    for project in splitedfiles:
-        dmpList.append(project.decode('UTF-8'))
-    return dmpList
-
-
-def mongo_backup_files_of_db():
-    path = MONGO_DMP_DIR.format("db")
-    print(path)
-    dmpList = []
-    command = "cd {}; ls -A1".format(path)
-    output = run_command(command, connect_to_server(TEMP_SERVER_NAME, MY_USERNAME, MY_PASS))
-    splitedfiles = output.splitlines()
-    for project in splitedfiles:
-        dmpList.append(project.decode('UTF-8'))
-    return dmpList
-
-
-def mongo_backup_files_of_collection():
-    path = MONGO_DMP_DIR.format("collection")
-    print(path)
-    dmpList = []
-    command = "cd {}; ls -A1".format(path)
-    output = run_command(command, connect_to_server(TEMP_SERVER_NAME, MY_USERNAME, MY_PASS))
+    output = run_command(LIST_COMMAND.format(path), connect_to_server(TEMP_SERVER_NAME, MY_USERNAME, MY_PASS))
     splitedfiles = output.splitlines()
     for project in splitedfiles:
         dmpList.append(project.decode('UTF-8'))

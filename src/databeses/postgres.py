@@ -6,7 +6,8 @@ PG_BACKUP_ALL_COMMAND = "pg_dumpall --clean -f "  # Need to insert the dmp file 
 PG_RESTORE_ALL_COMMAND = "psql -f "  # Need to insert the dmp file name
 # TODO: Change dir where backup files are!
 PG_DMP_DIR = "~/pgbackups/{}/"  # format with whole/db/schema"
-LIST_FILE_NAMES = "ls -A1"
+LIST_COMMAND = 'cd {}; ls -A1'
+RESOURCE_ERROR = 'Not a valid resourceType...'
 
 
 def pg_dbs():
@@ -38,36 +39,14 @@ def pg_restore_all():
     return 'PG restore of all dbs is done!'
 
 
-def pg_backup_files_of_all():
-    path = PG_DMP_DIR.format("whole")
-    print(path)
+def get_pg_backup_files_by_type(resourceType):
+    dirName = {'all': 'whole', 'db': 'db', 'schema': 'schema'}
+    resource = dirName.get(resourceType, RESOURCE_ERROR)
+    if resource == RESOURCE_ERROR:
+        return RESOURCE_ERROR
+    path = PG_DMP_DIR.format(resource)
     dmpList = []
-    command = "cd {}; ls -A1".format(path)
-    output = run_command(command, connect_to_server(TEMP_SERVER_NAME, MY_USERNAME, MY_PASS))
-    splitedfiles = output.splitlines()
-    for project in splitedfiles:
-        dmpList.append(project.decode('UTF-8'))
-    return dmpList
-
-
-def pg_backup_files_of_db():
-    path = PG_DMP_DIR.format("db")
-    print(path)
-    dmpList = []
-    command = "cd {}; ls -A1".format(path)
-    output = run_command(command, connect_to_server(TEMP_SERVER_NAME, MY_USERNAME, MY_PASS))
-    splitedfiles = output.splitlines()
-    for project in splitedfiles:
-        dmpList.append(project.decode('UTF-8'))
-    return dmpList
-
-
-def pg_backup_files_of_schema():
-    path = PG_DMP_DIR.format("schema")
-    print(path)
-    dmpList = []
-    command = "cd {}; ls -A1".format(path)
-    output = run_command(command, connect_to_server(TEMP_SERVER_NAME, MY_USERNAME, MY_PASS))
+    output = run_command(LIST_COMMAND.format(path), connect_to_server(TEMP_SERVER_NAME, MY_USERNAME, MY_PASS))
     splitedfiles = output.splitlines()
     for project in splitedfiles:
         dmpList.append(project.decode('UTF-8'))

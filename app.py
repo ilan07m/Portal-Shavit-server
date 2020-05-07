@@ -5,6 +5,7 @@ from resources.services import *
 from src.service_actions import *
 from src.db_actions import *
 from src.openshift_actions import *
+from src.error_handlers import *
 from resources.login_details import *
 from src.swagger import swaggerui_blueprint, SWAGGER_URL, REQUEST_API
 DEBUG_MODE = True  # Change to False if you want to run without debug mode!
@@ -92,9 +93,6 @@ def api_get_dbs():
     return jsonify(output)
 
 
-# TODO: ################################################
-# TODO: Add to swagger.json and README.md files!!!!!!! #
-# TODO: ################################################
 # http://localhost:5000/api/v1/shavit/dbs/backup_files?dbType=postgres&resourceType=all
 # Get dmps of ALL dbs of postgres / mongo / oracle
 # http://localhost:5000/api/v1/shavit/dbs/backup_files?dbType=postgres&resourceType=db
@@ -110,14 +108,10 @@ def api_get_dump_files_to_restore_from_dbs():
         resourceType = str(request.args['resourceType'])
     elif 'dbType' not in request.args:
         return 'Error: Bad arguments. Please specify valid dbType! (postgres / mongo / oracle)'
-    output = backup_files_by_type(dbType, resourceType)
+    output = get_backup_files_by_type(dbType, resourceType)
     return jsonify(output)
 
 
-
-# TODO: ################################################
-# TODO: Add to swagger.json and README.md files!!!!!!! #
-# TODO: ################################################
 # TODO: Check with wanted user to see if correct owner of db
 # http://localhost:5000/api/v1/shavit/dbs/create?dbType=postgres&dbName=testdb
 # Creates new db in postgres / mongo / oracle
