@@ -150,6 +150,21 @@ def api_restore_all_dbs():
     return jsonify(output)
 
 
+# TODO: ################################################
+# TODO: Add to swagger.json and README.md files!!!!!!! #
+# TODO: ################################################
+# http://localhost:5000/api/v1/shavit/dbs/master?dbType=postgres
+# Retruns the master of the db cluster of postgres / mongo / oracle
+@app.route('/api/v1/shavit/dbs/master', methods=['GET'])
+def api_get_master_of_db_cluster():
+    if 'dbType' in request.args:
+        dbType = str(request.args['dbType'])
+    elif 'dbType' not in request.args:
+        return 'Error: Bad arguments. Please specify valid dbType! (postgres / mongo / oracle)'
+    output = get_master_of_db_cluster(dbType)
+    return jsonify(output)
+
+
 # TODO: Login to ocp cluster as wanted user, infra or simple user
 # TODO: Change params to func to be not hard-coded
 # http://localhost:5000/api/v1/shavit/ocp/login

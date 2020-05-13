@@ -1,11 +1,14 @@
+from builtins import print
+
 from psycopg2 import connect, extensions, sql, Error
 from ..ssh_commands import *
 from resources.login_details import *
+from resources.servers import *
 PG_GET_ALL_DBS_COMMAND = "SELECT datname FROM pg_database;"
-PG_BACKUP_ALL_COMMAND = "pg_dumpall --clean -f "  # Need to insert the dmp file name
-PG_RESTORE_ALL_COMMAND = "psql -f "  # Need to insert the dmp file name
+PG_BACKUP_ALL_COMMAND = 'pg_dumpall --clean -f '  # Need to insert the dmp file name
+PG_RESTORE_ALL_COMMAND = 'psql -f '  # Need to insert the dmp file name
 # TODO: Change dir where backup files are!
-PG_DMP_DIR = "~/pgbackups/{}/"  # format with whole/db/schema"
+PG_DMP_DIR = '~/pgbackups/{}/'  # format with whole/db/schema
 LIST_COMMAND = 'cd {}; ls -A1'
 RESOURCE_ERROR = 'Not a valid resourceType...'
 
@@ -28,14 +31,14 @@ def pg_dbs():
 
 # TODO: Change the server name, the username and the password!!! + get dmp file as parameter!!!
 def pg_backup_all():
-    output = run_command(PG_BACKUP_ALL_COMMAND + "pg_bk_dump.dmp", connect_to_server(TEMP_SERVER_NAME, MY_USERNAME, MY_PASS))
+    output = run_command(PG_BACKUP_ALL_COMMAND + 'pg_bk_dump.dmp', connect_to_server(TEMP_SERVER_NAME, MY_USERNAME, MY_PASS))
     return 'PG backup of all dbs is done!'
 
 
 # TODO: Change the server name, the username and the password!!! + get dmp file as parameter!!!
 # TODO: Make it work!
 def pg_restore_all():
-    output = run_command(PG_RESTORE_ALL_COMMAND + "pg_bk_dump.dmp", connect_to_server(TEMP_SERVER_NAME, MY_USERNAME, MY_PASS))
+    output = run_command(PG_RESTORE_ALL_COMMAND + 'pg_bk_dump.dmp', connect_to_server(TEMP_SERVER_NAME, MY_USERNAME, MY_PASS))
     return 'PG restore of all dbs is done!'
 
 
@@ -70,3 +73,19 @@ def create_pg_db(dbName):
         return "done!"
     except Error as e:
         return e
+
+
+# TODO: Change the server names to be with the domains
+def get_pg_master():
+    #serviceCommand = 'ps -ef | grep wal'
+    serviceCommand = 'ps -ef | grep postgres'
+    pg_servers = get_names_of_server_of_server_group('POSTGRES')
+    for serverName in pg_servers:
+        # TODO: Check if working wothout the domain, if not uncomment the line
+        # serverName += ".domain.com"
+         output = run_command(serviceCommand, connect_to_server(serverName, MY_USERNAME, MY_PASS))
+        # TODO: Delete the next line in the unit
+        if output == 'wal_writer':
+            return ''
+        pass
+    return ''

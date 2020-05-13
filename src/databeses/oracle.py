@@ -17,3 +17,7 @@ def get_oracle_backup_files_by_type(resourceType):
 
 def create_oracle_db(dbName):
     return 'ORACLE is about to be ready...!'
+
+
+def get_oracle_master():
+    return 'ORACLE is about to be ready...!'

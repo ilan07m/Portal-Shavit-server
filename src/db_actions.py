@@ -68,3 +68,14 @@ def crete_db(dbType, dbName):
     ''' switch = {'postgres': create_pg_db(dbName), 'mongo': create_mongo_db(dbName), 'oracle': create_oracle_db(dbName)}
     func = switch.get(dbType, lambda: 'Not a valid dbType...')
     return func'''
+
+
+def get_master_of_db_cluster(dbType):
+    if dbType == POSTGRES:
+        return get_pg_master()
+    elif dbType == MONGO:
+        return get_mongo_master()
+    elif dbType == ORACLE:
+        return get_oracle_master()
+    else:
+        return "Error! not a valid db type..."
