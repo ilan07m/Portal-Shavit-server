@@ -128,3 +128,22 @@ def return_all_servers_of_group(serverGroupName):
                     results.append(server['name'])
                     print(server['name'])
     return results
+
+
+def get_all_servers_by_server_group_as_dict():
+    serversDict = {}
+    for serverGroups in SERVERS:
+        serverGroupName = ''
+        for server in serverGroups:
+            serverGroupName = server
+        serversDict[serverGroupName] = serverGroups
+    return(serversDict)
+
+
+def get_names_of_server_of_server_group(serverGroup):
+    serversNames = []
+    serversList = get_all_servers_by_server_group_as_dict()[serverGroup].values()
+    for dict in serversList:
+        for name in dict:
+            serversNames.append(name['name'])
+    return serversNames
