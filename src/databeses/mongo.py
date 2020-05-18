@@ -1,6 +1,7 @@
 import pymongo
 from ..ssh_commands import *
 from resources.login_details import *
+from resources.servers import *
 MONGO_BACKUP_ALL_COMMAND = 'mongodump -u {} -p {} --authenticationDatabase admin --out {}'  # Insert username, password, and the backup file path
 MONGO_RESTORE_ALL_COMMAND = 'mongorestore -u {} -p {} --authenticationDatabase admin --drop {}'  # Insert username, password, and the dmp file path
 # TODO: Change dir where backup files are!
@@ -18,14 +19,13 @@ def mongo_dbs():
         print('Could not connect to server: %s' % e)
 
 
-
 # TODO: Change the server name, the username and the password!!! + get backup file as parameter!!!
 def mongo_backup_all():
     output = run_command(MONGO_BACKUP_ALL_COMMAND.format(MONGO_ROOT_USER, MONGO_ROOT_PASSWORD, '/path/backup/file'),
                          connect_to_server(TEMP_SERVER_NAME, MY_USERNAME, MY_PASS))
     return 'MONGO backup of all dbs is done!!'
 
-# TODO: Change to valid command with format!
+
 # TODO: Change the server name, the username and the password!!! + get backup file as parameter!!!
 def mongo_restore_all():
     output = run_command(MONGO_RESTORE_ALL_COMMAND.format(MONGO_ROOT_USER, MONGO_ROOT_PASSWORD, '/path/backup/file'),
@@ -89,5 +89,20 @@ def create_mongo_user(dbName, username, password):
     '''
 
 
+# TODO: Set the currnet server name in the connetion string!
 def get_mongo_master():
-    return "NOT READY YET!"
+    try:
+        mongo_servers = get_names_of_server_of_server_group('MONGO')
+        for serverName in mongo_servers:
+            # TODO: change the connection string to get the serverName to the connection string and check that is works!
+            #client = pymongo.MongoClient(MONGO_CONNECTION_STRING_SERVER_PARAM.format(serverName)) # Uncomment in the unit and check
+            client = pymongo.MongoClient(MONGO_CONNECTION_STRING)
+            db = client.test_database
+            output = db.command('isMaster')
+            if output['ismaster']:
+                return serverName
+            else:
+                return 'ERROR! something is wrong... master not found...'
+    except pymongo.errors.ConnectionFailure as e:
+        error = 'Could not connect to server: %s' % e
+        return error

@@ -1,14 +1,12 @@
-from builtins import print
-
 from psycopg2 import connect, extensions, sql, Error
 from ..ssh_commands import *
 from resources.login_details import *
 from resources.servers import *
 PG_GET_ALL_DBS_COMMAND = "SELECT datname FROM pg_database;"
-PG_BACKUP_ALL_COMMAND = 'pg_dumpall --clean -f '  # Need to insert the dmp file name
-PG_RESTORE_ALL_COMMAND = 'psql -f '  # Need to insert the dmp file name
+PG_BACKUP_ALL_COMMAND = 'pg_dumpall --clean -f '  # Insert the dmp file name
+PG_RESTORE_ALL_COMMAND = 'psql -f '  # Insert the dmp file name
 # TODO: Change dir where backup files are!
-PG_DMP_DIR = '~/pgbackups/{}/'  # format with whole/db/schema
+PG_DMP_DIR = '~/pgbackups/{}/'  # Format with whole/db/schema
 LIST_COMMAND = 'cd {}; ls -A1'
 RESOURCE_ERROR = 'Not a valid resourceType...'
 
@@ -18,7 +16,7 @@ def pg_dbs():
     try:
         # TODO: Change host name
         db_conn = connect(host=TEMP_SERVER_NAME, port=PG_PORT, dbname=PG_MAIN_DB, user=PG_ROOT_USER,
-                                   password=PG_ROOT_PASSWORD)
+                          password=PG_ROOT_PASSWORD)
         db_cursor = db_conn.cursor()
         db_cursor.execute(PG_GET_ALL_DBS_COMMAND)
         for database in db_cursor.fetchall():
@@ -62,7 +60,7 @@ def get_pg_backup_files_by_type(resourceType):
 def create_pg_db(dbName):
     try:
         db_conn = connect(host=TEMP_SERVER_NAME, port=PG_PORT, dbname=PG_MAIN_DB, user=PG_ROOT_USER,
-                                   password=PG_ROOT_PASSWORD)
+                          password=PG_ROOT_PASSWORD)
         autocommit = extensions.ISOLATION_LEVEL_AUTOCOMMIT
         db_conn.set_isolation_level(autocommit)
         db_cursor = db_conn.cursor()
@@ -75,17 +73,13 @@ def create_pg_db(dbName):
         return e
 
 
-# TODO: Change the server names to be with the domains
 def get_pg_master():
-    #serviceCommand = 'ps -ef | grep wal'
-    serviceCommand = 'ps -ef | grep postgres'
+    serviceCommand = "ps -ef | grep .wal.writer | awk 'NR==1 {print $10}'"
     pg_servers = get_names_of_server_of_server_group('POSTGRES')
     for serverName in pg_servers:
-        # TODO: Check if working wothout the domain, if not uncomment the line
-        # serverName += ".domain.com"
-         output = run_command(serviceCommand, connect_to_server(serverName, MY_USERNAME, MY_PASS))
-        # TODO: Delete the next line in the unit
-        if output == 'wal_writer':
-            return ''
-        pass
-    return ''
+        # TODO: change the connection to get the serverName and check that is works!
+        # output = run_command(serviceCommand, connect_to_server(serverName, MY_USERNAME, MY_PASS))
+        output = run_command(serviceCommand, connect_to_server(TEMP_SERVER_NAME, MY_USERNAME, MY_PASS))
+        if output.decode('UTF-8')[:-1] == 'writer':  # [:-1] deletes the \n from the end of the string
+            return serverName
+    return 'Error in getting pg master server...'
