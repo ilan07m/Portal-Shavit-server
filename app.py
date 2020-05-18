@@ -5,7 +5,7 @@ from resources.services import *
 from src.service_actions import *
 from src.db_actions import *
 from src.openshift_actions import *
-from src.error_handlers import *
+#from src.error_handlers import *
 from resources.login_details import *
 from src.swagger import swaggerui_blueprint, SWAGGER_URL, REQUEST_API
 DEBUG_MODE = True  # Change to False if you want to run without debug mode!
